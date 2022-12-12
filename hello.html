@@ -1,0 +1,114 @@
+<!-- HTML for the search bar -->
+
+<form id="search-form">
+ 
+ <label for="search-input">Search for images:</label>
+  
+<input type="text" id="search-input" placeholder="Enter a keyword">
+  
+<button type="submit">Search</button>
+
+</form>
+
+
+<!-- HTML for the image gallery -->
+
+<div id="image-gallery">
+</div>
+
+
+<!-- CSS for styling the search bar and image gallery -->
+
+<style>
+  
+#search-form {
+    display: flex;
+    align-items: center;
+  }
+
+  #search-form label {
+    margin-right: 0.5em;
+  }
+  
+#search-form input[type="text"] 
+{
+    flex-grow: 1;
+  }
+ 
+ #image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+  }
+ 
+ #image-gallery img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin: 0.5em;
+  }
+
+</style>
+
+<!-- JavaScript for handling the search and image fetching -->
+
+
+<script>
+ 
+ // Get references to the form and image gallery elements
+  const searchForm = document.querySelector('#search-form');
+ 
+ const imageGallery = document.querySelector('#image-gallery');
+
+  
+// Add a submit event listener to the form
+  searchForm.addEventListener('submit', async event => {
+   
+ // Prevent the default form submission behavior
+    event.preventDefault();
+
+    
+// Get the value of the search input
+    const searchTerm = document.querySelector('#search-input').value;
+
+
+    
+// Use an image search API to fetch images based on the search term
+    
+// This example uses the Unsplash API (https://unsplash.com/developers), but you can use any image search API
+    
+const response = await fetch(`http://localhost:2000/api/users/${searchTerm}`);
+    
+
+const data = await response.json();
+
+   
+console.log(data);
+ // Clear the existing images from the gallery
+    imageGallery.innerHTML = '';
+
+    
+// Add the new images to the gallery
+    data.forEach(image => {
+      const imgElement = document.createElement('img');
+    
+  imgElement.src = image.url; 
+  
+// Use the thumbnail URL for the image
+      imageGallery.appendChild(imgElement);
+  
+
+const descElement = document.createElement('p');
+        descElement.innerText =`Price:${image.price}`
+        descElement.classList.add('image-description');
+        imageGallery.appendChild(descElement);
+
+const descElement1 = document.createElement('p');
+        descElement1.innerText =image.name[0]
+        descElement1.classList.add('image-description');
+        imageGallery.appendChild(descElement1);
+  });
+  });
+
+
+
+</script>
